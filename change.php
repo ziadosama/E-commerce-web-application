@@ -74,6 +74,7 @@
 			$row=$query->fetch_array();
 			$query="INSERT INTO buyer(buyerPhone,buyerName,buyerEmail,buyerPwd) VALUES('$row[sellerPhone]','$row[sellerName]','$row[sellerEmail]','$row[sellerPwd]')";
 		}
+		header("Location=change.php?bs=b");
 	}
 	
 	if(isset($_POST['btn-seller'])){
@@ -86,9 +87,9 @@
 			$row=$query->fetch_array();
 			$query="INSERT INTO seller(sellerPhone,sellerName,sellerEmail,sellerPwd) VALUES('$row[buyerPhone]','$row[buyerName]','$row[buyerEmail]','$row[buyerPwd]')";
 		}
+		header("Location=change.php?bs=s");
 	}
 	
-	$DBcon->close();
 
 ?>
 

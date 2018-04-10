@@ -18,13 +18,19 @@
 		$catID = strip_tags($_POST['catID']);
 		$catID = $DBcon->real_escape_string($catID);
 		$categoryQ=$DBcon->query("SELECT * FROM category WHERE sellerID='$userID'");
-		if(empty($catID)){
-			$result=$DBcon->query("INSERT INTO category(catName, storeID, sellerID) VALUES ('$catName','$storeID','$userID'); ");
+		if(empty($catID) AND empty($catName)){
+			$msg = "<div class='alert alert-danger'>
+					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; category ID and name empty!
+				</div>";
+		}
+		elseif(empty($catID)){
+			$result=$DBcon->query("INSERT INTO category(catName,storeID,sellerID) VALUES ('$catName','$storeID','$userID'); ");
+			header("Location: category.php");
+		
 		}else{
 			$categoryQ=$DBcon->query("UPDATE category SET catName='$catName' WHERE sellerID='$userID' AND categoryID='$catID';");
-
+			header("Location: category.php");
 		}
-		header("Location: category.php");
 	}
 	if (isset($_POST['btn-delete'])) {
 		
@@ -37,10 +43,10 @@
 					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; category ID and name empty!
 				</div>";
 		}
-		else	
+		else	{
 			$result=$DBcon->query("DELETE FROM `category` WHERE (categoryID = '$catID' OR catName = '$catName')AND sellerID='$userID'");
-		
 		header("Location: category.php");
+		}
 	}
 	if (isset($_POST['btn-products'])) {
 		header("Location:products.php");

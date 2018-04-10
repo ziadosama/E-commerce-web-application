@@ -5,54 +5,50 @@
 	if (!isset($_SESSION['userSession'])) {
 		header("Location: index.php");
 	}
-	
+	$msg="";
 	$userID=$_SESSION['userSession'];
-	$store=$DBcon->query("SELECT productID FROM product WHERE productID='$userID'");
-	$userRow=$store->fetch_array();
-	$storeID=$userRow['storeID'];
-	$categoryQ=$DBcon->query("SELECT * FROM product WHERE productID='$userID'");
+	$category=$DBcon->query("SELECT categoryID FROM category WHERE sellerID='$userID';");
+	$userRow=$category->fetch_array();
+	$categoryID=$userRow['categoryID'];
+	$categoryQ=$DBcon->query("SELECT * FROM product WHERE sellerID='$userID'");
 	
 	if (isset($_POST['btn-save'])) {
 		
-		$catName = strip_tags($_POST['catName']);
-		$catName = $DBcon->real_escape_string($catName);
-		$catID = strip_tags($_POST['catID']);
-		$catID = $DBcon->real_escape_string($catID);
+		$productName = strip_tags($_POST['productName']);
+		$productName = $DBcon->real_escape_string($productName);
+		$productID = strip_tags($_POST['productID']);
+		$productID = $DBcon->real_escape_string($productID);
 		$categoryQ=$DBcon->query("SELECT * FROM product WHERE sellerID='$userID' AND categoryID");
-		if(empty($catID)){
-			$result=$DBcon->query("INSERT INTO product(catName, storeID, sellerID) VALUES ('$catName','$storeID','$userID'); ");
-		}else{
-			$categoryQ=$DBcon->query("UPDATE category SET catName='$catName' WHERE sellerID='$userID' AND categoryID='$catID';");
-
+		if(empty($productID) AND empty($productName)){
+			$msg = "<div class='alert alert-danger'>
+					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; product ID and name empty!
+				</div>";
 		}
-		header("Location: category.php");
+		elseif(empty($productID)){
+			$result=$DBcon->query("INSERT INTO product(categoryID, sellerID,productName) VALUES ('$categoryID','$userID','$productName'); ");
+			header("Location: products.php");
+		}else{
+			$categoryQ=$DBcon->query("UPDATE product SET productName='$productName' WHERE productID='$userID' AND productID='$productID';");
+			header("Location: products.php");
+		}
 	}
 	if (isset($_POST['btn-delete'])) {
 		
-		$catName = strip_tags($_POST['catName']);
-		$catName = $DBcon->real_escape_string($catName);
-		$catID = strip_tags($_POST['catID']);
-		$catID = $DBcon->real_escape_string($catID);
-		if(empty($catID) AND empty($catName)){
+		$productName = strip_tags($_POST['productName']);
+		$productName = $DBcon->real_escape_string($productName);
+		$productID = strip_tags($_POST['productID']);
+		$productID = $DBcon->real_escape_string($productID);
+		if(empty($productID) AND empty($productName)){
 			$msg = "<div class='alert alert-danger'>
-					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; category ID and name empty!
+					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; product ID and name empty!
 				</div>";
 		}
-		else	
-			$result=$DBcon->query("DELETE FROM `category` WHERE (categoryID = '$catID' OR catName = '$catName')AND sellerID='$userID'");
-		
-		header("Location: category.php");
-	}
-	if (isset($_POST['btn-products'])) {
-		$catID = strip_tags($_POST['catID']);
-		$catID = $DBcon->real_escape_string($catID);
-		if(empty($catID)){
-			$msg = "<div class='alert alert-danger'>
-					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; category ID empty!
-				</div>";
+		elseif(empty($productID)){
+			$result=$DBcon->query("DELETE FROM `product` WHERE (productID = '$productID' OR productName = '$productName')AND sellerID='$userID'");
+		header("Location: products.php");
 		}
-		else header("Location:products.php?catID=catID");
 	}
+	
 	$DBcon->close();
 
 ?>
@@ -89,7 +85,7 @@
 			echo "<table style='width:100%'>"; // start a table tag in the HTML
 
 			while($row = mysqli_fetch_array($categoryQ)){   //Creates a loop to loop through results
-			echo "<tr><th>Category ID</th><th>category Name</th></tr><tr><td>" . $row['categoryID'] . "</td><td>" . $row['catName'] . "</td></tr>";  //$row['index'] the index here is a field name
+			echo "<tr><th>Product ID</th><th>Product Name</th></tr><tr><td>" . $row['productID'] . "</td><td>" . $row['productName'] . "</td></tr>";  //$row['index'] the index here is a field name
 			}
 
 			echo "</table>"; //Close the table in HTML
@@ -99,14 +95,14 @@
 		  <div class="form-group">
 			<label class="col-lg-3 control-label">Product ID:</label>
 			<div class="col-lg-8">
-			  <input class="form-control" type="text" placeholder="Category ID to change name (leave empty to add new categories)" name="catID">
+			  <input class="form-control" type="text" placeholder="Category ID to change name (leave empty to add new categories)" name="productID">
 			</div>
 		  </div>
 		  
 		   <div class="form-group">
 			<label class="col-lg-3 control-label">Product Name:</label>
 			<div class="col-lg-8">
-			  <input class="form-control" type="text" placeholder="Category Name" name="catName">
+			  <input class="form-control" type="text" placeholder="Category Name" name="productName">
 			</div>
 		  </div>
 		  
