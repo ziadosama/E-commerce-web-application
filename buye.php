@@ -21,7 +21,19 @@ $DBcon->close();
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 <body>
+<style type="text/css">
 
+body{ 
+    /* The image used */
+    background-image: url("bgmain.jpg");
+
+    /* Full height */
+    height: 100%; 
+
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+</style>
 <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -35,7 +47,12 @@ $DBcon->close();
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="../change.php?bs=b">Edit Info</a></li>
+            <li><a href="../change.php?bs=b">Edit Info</a></li>
+            <li><a href="../search.php">Search</a></li>
+            <li><a href="../cart.php">Cart</a></li>
+            <li><a href="../orderHistory.php">Order History</a></li>
+          </ul>
+		  <ul class="nav navbar-nav">
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp; <?php echo $userRow['buyerName']; ?></a></li>
