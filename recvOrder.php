@@ -1,17 +1,20 @@
 <?php
 	session_start();
 	include_once 'dbconnect.php';
-
 	if (!isset($_SESSION['userSession'])) {
 		header("Location: index.php");
 	}
 	
+	$msg="";
+	$userID=$_SESSION['userSession'];
+	$orders=$DBcon->query("SELECT * FROM orrder WHERE sellerID='$userID';");
+	$userRow=$orders->fetch_array();
 	
-	if (isset($_POST['btn-save'])) {
+	if (isset($_POST['btn-delete'])) {
 		
+	}
 	
 	$DBcon->close();
-	}
 
 ?>
 
@@ -27,88 +30,48 @@
 
 <body>
 <div class="container">
-    <h1>Edit Profile</h1>
+    <h1>Orders
+	  <a href="seller.php" class="btn btn-default" style="float:right;">back</a>
+	  </h1>
   	<hr>
       <!-- edit form column -->
       <div class="col-md-9 personal-info">
-        <h3>Personal info</h3>
+	  
+        <h3>Orders Info</h3>
         
         <form class="form-horizontal" role="form" method="post">
-          
+         
 		  <?php
 			if (isset($msg)) {
 				echo $msg;
 			}
 			?>
-		 
+		  <?php
+			echo "<table style='width:100%'>"; // start a table tag in the HTML
+
+			while($row = mysqli_fetch_array($orders)){   //Creates a loop to loop through results
+			echo "<tr><th>order ID</th><th>order date</th></tr><tr><td>" . $row['orderID'] . "</td><td>" . $row['orderDate'] . "</td></tr>";  //$row['index'] the index here is a field name
+			}
+
+			echo "</table>"; //Close the table in HTML
+		  ?>
+		  <hr>
+		  
 		  <div class="form-group">
-			<label class="col-lg-3 control-label">User Name:</label>
+			<label class="col-lg-3 control-label">order ID:</label>
 			<div class="col-lg-8">
-			  <input class="form-control" type="text" placeholder="User Name" name="name">
+			  <input class="form-control" type="text" placeholder="Category ID to change name (leave empty to add new categories)" name="catID">
 			</div>
 		  </div>
-		  
-		  <div class="form-group">
-			<label class="col-lg-3 control-label">Phone:</label>
-			<div class="col-lg-8">
-			  <input class="form-control" type="text" placeholder="Phone" name="phone">
-			</div>
-		  </div>
-		  
-		  <div class="form-group">
-			<label class="col-lg-3 control-label">Email:</label>
-			<div class="col-lg-8">
-			  <input class="form-control" type="text" placeholder="Email" name="email">
-			</div>
-		  </div>
-		  
-		  <div class="form-group">
-			<label class="col-md-3 control-label">Password:</label>
-			<div class="col-md-8">
-			  <input class="form-control" type="password" placeholder="Password" name="password">
-			</div>
-		  </div>
-		  
-		  <div class="form-group">
-			<label class="col-md-3 control-label">Confirm password:</label>
-			<div class="col-md-8">
-			  <input class="form-control" type="password" placeholder="Confirm Password" name="password2">
-			</div>
-		  </div>
-		  
 		  <div class="form-group">
 			<label class="col-md-3 control-label"></label>
 			<div class="col-md-8">
-			  <button type="submit" class="btn btn-default" name="btn-save">
-			  <span class="glyphicon glyphicon-save-changes"></span> &nbsp; Save Changes
-			  </button>
-			  <a href="buye.php" class="btn btn-default" style="float:right;">Cancel</a>
-			</div>
-		  </div>
-		  
-		  <?php if($bs=='b'){  ?>
-		  
-		  <div class="form-group">
-			<label class="col-md-3 control-label">Change to seller</label>
-			<div class="col-md-8">
-			  <button type="submit" class="btn btn-default" name="btn-seller">
-			  <span class="glyphicon glyphicon-seller-change"></span> &nbsp; Seller Change
+			  <button type="submit" class="btn btn-default" name="btn-delete">
+			  <span class="glyphicon glyphicon-save-changes"></span> delete Orders
 			  </button>
 			</div>
 		  </div>
 		  
-		  <?php } elseif($bs=='s'){ ?>
-		  
-		  <div class="form-group">
-			<label class="col-md-3 control-label">Change to buyer</label>
-			<div class="col-md-8">
-			  <button type="submit" class="btn btn-default" name="btn-buyer">
-			  <span class="glyphicon glyphicon-buyer-change"></span> &nbsp; Buyer Change
-			  </button>
-			</div>
-		  </div>
-		  
-		  <?php } ?>
 		  
         </form>
       </div>

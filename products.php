@@ -7,9 +7,6 @@
 	}
 	$msg="";
 	$userID=$_SESSION['userSession'];
-	$category=$DBcon->query("SELECT categoryID FROM category WHERE sellerID='$userID';");
-	$userRow=$category->fetch_array();
-	$categoryID=$userRow['categoryID'];
 	$categoryQ=$DBcon->query("SELECT * FROM product WHERE sellerID='$userID'");
 	
 	if (isset($_POST['btn-save'])) {
@@ -18,14 +15,17 @@
 		$productName = $DBcon->real_escape_string($productName);
 		$productID = strip_tags($_POST['productID']);
 		$productID = $DBcon->real_escape_string($productID);
-		$categoryQ=$DBcon->query("SELECT * FROM product WHERE sellerID='$userID' AND categoryID");
+		$catName = strip_tags($_POST['catName']);
+		$catName = $DBcon->real_escape_string($catName);
+		$categoryID=$DBcon->query("SELECT categoryID FROM category WHERE sellerID='$userID' AND catName='$catName';");
+		$userRow=$categoryID->fetch_array();
 		if(empty($productID) AND empty($productName)){
 			$msg = "<div class='alert alert-danger'>
 					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; product ID and name empty!
 				</div>";
 		}
 		elseif(empty($productID)){
-			$result=$DBcon->query("INSERT INTO product(categoryID, sellerID,productName) VALUES ('$categoryID','$userID','$productName'); ");
+			$result=$DBcon->query("INSERT INTO product(categoryID, sellerID,productName) VALUES ('$userRow[categoryID]','$userID','$productName'); ");
 			header("Location: products.php");
 		}else{
 			$categoryQ=$DBcon->query("UPDATE product SET productName='$productName' WHERE productID='$userID' AND productID='$productID';");
@@ -96,6 +96,13 @@
 			<label class="col-lg-3 control-label">Product ID:</label>
 			<div class="col-lg-8">
 			  <input class="form-control" type="text" placeholder="Category ID to change name (leave empty to add new categories)" name="productID">
+			</div>
+		  </div>
+		  
+		  <div class="form-group">
+			<label class="col-lg-3 control-label">Category Name:</label>
+			<div class="col-lg-8">
+			  <input class="form-control" type="text" placeholder="Category ID to change name (leave empty to add new categories)" name="catName">
 			</div>
 		  </div>
 		  
