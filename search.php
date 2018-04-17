@@ -50,13 +50,30 @@
 			}
 			$addCartProduct=$DBcon->query("SELECT cartID FROM cart WHERE buyerID='$userID'; ");
 			$cartIDrow=$addCartProduct->fetch_array();
-			$check_product = $DBcon->query("SELECT * FROM `cart-product` WHERE productID='$userRow[productID]'");
+			$check_product = $DBcon->query("SELECT * FROM `cart-product` WHERE productID='$userRow[productID]' AND cartID='$cartIDrow[cartID]'");
 			$count=$check_product->num_rows;
 			if($count==0){
 				$result2=$DBcon->query("INSERT INTO `cart-product`(productID,cartID, quantity) VALUES ('$userRow[productID]','$cartIDrow[cartID]', 1); ");
 			} else{
-				$result2=$DBcon->query("UPDATE `cart-product` SET quantity=quantity+1 Where productID='$userRow[productID]'");
+				$result2=$DBcon->query("UPDATE `cart-product` SET quantity=quantity+1 Where productID='$userRow[productID]' AND cartID='$cartIDrow[cartID]';");
 			}
+		}
+	}
+	
+	if(isset($_POST['btn-remove'])){
+		$productName = strip_tags($_POST['productName']);
+		$productName = $DBcon->real_escape_string($productName);
+		if( empty($productName)){
+			$msg = "<div class='alert alert-danger'>
+					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; product name empty!
+				</div>";
+		} else{
+			$addCartProduct=$DBcon->query("SELECT cartID FROM cart WHERE buyerID='$userID'; ");
+			$cartIDrow=$addCartProduct->fetch_array();
+			$addProduct=$DBcon->query("SELECT P.productID FROM product P, category C Where P.productName='$productName' And P.categoryID = C.categoryID");
+			$userRow=$addProduct->fetch_array();
+			$result=$DBcon->query("DELETE FROM `cart-product` Where productID='$userRow[productID]' AND quantity=1 AND cartID='$cartIDrow[cartID]'");
+			$result2=$DBcon->query("UPDATE `cart-product` SET quantity=quantity-1 Where productID='$userRow[productID]'  AND cartID='$cartIDrow[cartID]'");
 		}
 	}
 	
@@ -76,10 +93,34 @@
 
 <body>
 <div class="container">
-    <h1>Product
-	  <a href="buye.php" class="btn btn-default" style="float:right;">back</a>
-	  </h1>
-  	<hr>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand">Buyer Page</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="../change.php?bs=b">Edit Info</a></li>
+            <li class="active"><a href="../search.php">Search</a></li>
+            <li><a href="../cart.php">Cart</a></li>
+            <li><a href="../orderHistory.php">Order History</a></li>
+          </ul>
+		  <ul class="nav navbar-nav">
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp; </a></li>
+            <li><a href="logout.php?logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp; Logout</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+	<br><br></br></br>
       <!-- edit form column -->
       <div class="col-md-9 personal-info">
 	  
@@ -115,8 +156,12 @@
 			  <button type="submit" class="btn btn-default" name="btn-search">
 			  <span class="glyphicon glyphicon-save-changes"></span> Search Product
 			  </button>
-			   <button style={float:"right";} type="submit" class="btn btn-default" name="btn-add">
+			   <button type="submit" class="btn btn-default" name="btn-add">
 			  <span class="glyphicon glyphicon-save-changes"></span> Add to cart
+			  </button>
+			  </button>
+			   <button type="submit" class="btn btn-default" name="btn-remove">
+			  <span class="glyphicon glyphicon-save-changes"></span> Remove from cart
 			  </button>
 			</div>
 		  </div>

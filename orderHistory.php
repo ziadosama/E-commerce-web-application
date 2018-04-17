@@ -32,10 +32,34 @@
 
 <body>
 <div class="container">
-    <h1>Oders
-	  <a href="buye.php" class="btn btn-default" style="float:right;">back</a>
-	  </h1>
-  	<hr>
+   <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand">Buyer Page</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="../change.php?bs=b">Edit Info</a></li>
+            <li><a href="../search.php">Search</a></li>
+            <li><a href="../cart.php">Cart</a></li>
+            <li class="active"><a href="../orderHistory.php">Order History</a></li>
+          </ul>
+		  <ul class="nav navbar-nav">
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;</a></li>
+            <li><a href="logout.php?logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp; Logout</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+	<br><br></br></br>
       <!-- edit form column -->
       <div class="col-md-9 personal-info">
 	  
