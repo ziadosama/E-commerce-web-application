@@ -48,7 +48,7 @@ body{
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="../change.php?bs=s">Edit Info</a></li>
+            <li><a href="../change.php?bs=s">Edit Info</a></li>
             <li><a href="../addStore.php">Store</a></li>
             <li><a href="../recvOrder.php">Recieve Order</a></li>
           </ul>
