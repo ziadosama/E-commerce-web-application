@@ -9,9 +9,9 @@
 	$userID=$_SESSION['userSession'];
 	$cart=$DBcon->query("SELECT * FROM cart WHERE buyerID='$userID';");
 	$userRow=$cart->fetch_array();
-	$cartP=$DBcon->query("SELECT * FROM `cart-product` WHERE cartID='$userRow[cartID]';");
+	$cartP=$DBcon->query("SELECT P.productName, C.quantity FROM `cart-product` C, Product P WHERE cartID='$userRow[cartID]' AND C.productID= P.productID;");
 	
-	if (isset($_POST['btn-delete'])) {
+	if (isset($_POST['btn-make'])) {
 		
 	}
 	
@@ -49,28 +49,18 @@
 			?>
 		  <?php
 			echo "<table style='width:100%'>"; // start a table tag in the HTML
-
+			$count=1;
 			while($row = mysqli_fetch_array($cartP)){   //Creates a loop to loop through results
-			echo "<tr><th>cart ID</th><th>product ID</th></tr><tr><td>" . $row['cartID'] . "</td><td>" . $row['productID'] . "</td></tr>";  //$row['index'] the index here is a field name
+			echo "<tr><th>Number</th><th>Product Name</th><th>Quantity</th></tr><tr><td>" . $count++ . "</td><td>" . $row['productName'] . "</td><td>" . $row['quantity'] . "</td></tr>";  //$row['index'] the index here is a field name
 			}
 
 			echo "</table>"; //Close the table in HTML
 		  ?>
-		  <hr>
 		  
 		  <div class="form-group">
-			<label class="col-lg-3 control-label">order ID:</label>
-			<div class="col-lg-8">
-			  <input class="form-control" type="text" placeholder="Category ID to change name (leave empty to add new categories)" name="catID">
-			</div>
-		  </div>
-		  <div class="form-group">
-			<label class="col-md-3 control-label"></label>
-			<div class="col-md-8">
-			  <button type="submit" class="btn btn-default" name="btn-delete">
-			  <span class="glyphicon glyphicon-save-changes"></span> delete Orders
+			  <button style="float: center;" type="submit" class="btn btn-default" name="btn-make">
+			  <span class="glyphicon glyphicon-save-changes"></span> Make Order
 			  </button>
-			</div>
 		  </div>
 		  
 		  

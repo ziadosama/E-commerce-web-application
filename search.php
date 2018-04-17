@@ -48,9 +48,15 @@
 			if($count==0){
 				$result=$DBcon->query("INSERT INTO cart(buyerID) VALUES ('$userID'); ");
 			}
-			$addCartProduct=$DBcon->query("SELECT cartID FROM cart Where buyerID='$userID'; ");
+			$addCartProduct=$DBcon->query("SELECT cartID FROM cart WHERE buyerID='$userID'; ");
 			$cartIDrow=$addCartProduct->fetch_array();
-			$result2=$DBcon->query("INSERT INTO `cart-product`(productID,cartID) VALUES ('$userRow[productID]','$cartIDrow[cartID]'); ");
+			$check_product = $DBcon->query("SELECT * FROM `cart-product` WHERE productID='$userRow[productID]'");
+			$count=$check_product->num_rows;
+			if($count==0){
+				$result2=$DBcon->query("INSERT INTO `cart-product`(productID,cartID, quantity) VALUES ('$userRow[productID]','$cartIDrow[cartID]', 1); ");
+			} else{
+				$result2=$DBcon->query("UPDATE `cart-product` SET quantity=quantity+1 Where productID='$userRow[productID]'");
+			}
 		}
 	}
 	
