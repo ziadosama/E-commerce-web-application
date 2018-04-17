@@ -7,6 +7,7 @@
 		header("Location: index.php");
 	}
 	
+	$userID=$_SESSION['userSession'];
 	
 	if (isset($_POST['btn-save'])) {
 		$name=strip_tags($_POST['name']);
@@ -17,7 +18,7 @@
 		
 		if($password!=$password2){
 			$msg = "<div class='alert alert-danger'>
-					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; Mismatching passwords !
+					<span class='glyphicon glyphicon-info-sign'></span>  ; Mismatching passwords !
 				</div>";
 		}
 		else{
@@ -65,31 +66,43 @@
 	}
 	
 	if(isset($_POST['btn-buyer'])){
-		$query=$DBcon->query("SELECT  sellerEmail FROM seller WHERE sellerID=".$_SESSION['userSession']);
+		$query=$DBcon->query("SELECT  sellerEmail FROM seller WHERE sellerID='$userID'");
 		$row=$query->fetch_array();
-		$check_email=$DBcon->query("SELECT  buyerEmail FROM buyer WHERE buyerEmail='$row[sellerEmail]'");
+		$check_email=$DBcon->query("SELECT  * FROM buyer WHERE buyerEmail='$row[sellerEmail]'");
 		$count=$check_email->num_rows;
 		if($count==0){
-			$query=$DBcon->query("SELECT  * FROM seller WHERE sellerID=".$_SESSION['userSession']);
+			$query=$DBcon->query("SELECT  * FROM seller WHERE sellerID='$userID'");
 			$row=$query->fetch_array();
-			$query="INSERT INTO buyer(buyerPhone,buyerName,buyerEmail,buyerPwd) VALUES('$row[sellerPhone]','$row[sellerName]','$row[sellerEmail]','$row[sellerPwd]')";
+			$query=$DBcon->query("INSERT INTO buyer(buyerPhone,buyerName,buyerEmail,buyerPwd) VALUES('$row[sellerPhone]','$row[sellerName]','$row[sellerEmail]','$row[sellerPwd]')");
+			$ID=$DBcon->insert_id;
+			$_SESSION['userSession']=$ID;
+		} else{
+			$query=$DBcon->query("SELECT  buyerID FROM buyer WHERE buyerEmail='$row[sellerEmail]'");
+			$result=$query->fetch_array();
+			$_SESSION['userSession']=$result['buyerID'];
 		}
-		header("Location=change.php?bs=b");
+		header("Location:change.php?bs=b");
 	}
 	
 	if(isset($_POST['btn-seller'])){
-		$query=$DBcon->query("SELECT  buyerEmail FROM buyer WHERE buyerID=".$_SESSION['userSession']);
-		$row=$query->fetch_array();
-		$check_email=$DBcon->query("SELECT  sellerEmail FROM seller WHERE sellerEmail='row[buyerEmail]'");
+		$query=$DBcon->query("SELECT * FROM buyer WHERE buyerID='$userID'");
+		$row2=$query->fetch_array();
+		$check_email=$DBcon->query("SELECT  * FROM seller WHERE sellerEmail='$row2[buyerEmail]'");
 		$count=$check_email->num_rows;
 		if($count==0){
-			$query=$DBcon->query("SELECT  * FROM buyer WHERE buyerID=".$_SESSION['userSession']);
-			$row=$query->fetch_array();
-			$query="INSERT INTO seller(sellerPhone,sellerName,sellerEmail,sellerPwd) VALUES('$row[buyerPhone]','$row[buyerName]','$row[buyerEmail]','$row[buyerPwd]')";
+			$query=$DBcon->query("SELECT  * FROM buyer WHERE buyerID='$userID'");
+			$row3=$query->fetch_array();
+			$query=$DBcon->query("INSERT INTO seller(sellerPhone,sellerName,sellerEmail,sellerPwd) VALUES('$row3[buyerPhone]','$row3[buyerName]','$row3[buyerEmail]','$row3[buyerPwd]')");
+			$ID=$DBcon->insert_id;
+			$_SESSION['userSession']=$ID;
+		}else{
+			$query=$DBcon->query("SELECT  sellerID FROM seller WHERE sellerEmail='$row2[buyerEmail]'");
+			$result=$query->fetch_array();
+			$_SESSION['userSession']=$result['sellerID'];
 		}
-		header("Location=change.php?bs=s");
+		header("Location:change.php?bs=s");
 	}
-	
+	$DBcon->close();
 
 ?>
 
@@ -118,10 +131,17 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
+		  <?php if($bs=='b'){  ?>
             <li class="active"><a href="../change.php?bs=b">Edit Info</a></li>
             <li><a href="../search.php">Search</a></li>
             <li><a href="../cart.php">Cart</a></li>
             <li ><a href="../orderHistory.php">Order History</a></li>
+		  <?php } elseif($bs=='s'){ ?>
+		    <li class="active"><a href="../change.php?bs=b">Edit Info</a></li>
+            <li><a href="../addStore.php">Store</a></li>
+            <li><a href="../recvOrder.php">Recieve Order</a></li>
+		  <?php } ?>
+		  
           </ul>
 		  <ul class="nav navbar-nav">
           </ul>
@@ -184,7 +204,7 @@
 			<label class="col-md-3 control-label"></label>
 			<div class="col-md-8">
 			  <button type="submit" class="btn btn-default" name="btn-save">
-			  <span class="glyphicon glyphicon-save-changes"></span> &nbsp; Save Changes
+			  <span class="glyphicon glyphicon-save-changes"></span>Save Changes
 			  </button>
 			  <a href="javascript:history.back()" class="btn btn-default" style="float:right;">Cancel</a>
 			</div>
@@ -196,7 +216,7 @@
 			<label class="col-md-3 control-label">Change to seller</label>
 			<div class="col-md-8">
 			  <button type="submit" class="btn btn-default" name="btn-seller">
-			  <span class="glyphicon glyphicon-seller-change"></span> &nbsp; Seller Change
+			  <span class="glyphicon glyphicon-seller-change"></span>Seller Change
 			  </button>
 			</div>
 		  </div>
@@ -207,7 +227,7 @@
 			<label class="col-md-3 control-label">Change to buyer</label>
 			<div class="col-md-8">
 			  <button type="submit" class="btn btn-default" name="btn-buyer">
-			  <span class="glyphicon glyphicon-buyer-change"></span> &nbsp; Buyer Change
+			  <span class="glyphicon glyphicon-buyer-change"></span>Buyer Change
 			  </button>
 			</div>
 		  </div>
