@@ -10,7 +10,6 @@
 	$cart=$DBcon->query("SELECT * FROM cart WHERE buyerID='$userID';");
 	$userRow=$cart->fetch_array();
 	$cartP=$DBcon->query("SELECT * FROM `cart-product` WHERE cartID='$userRow[cartID]';");
-	$userRow=$cart->fetch_array();
 	
 	if (isset($_POST['btn-delete'])) {
 		
@@ -52,7 +51,7 @@
 			echo "<table style='width:100%'>"; // start a table tag in the HTML
 
 			while($row = mysqli_fetch_array($cartP)){   //Creates a loop to loop through results
-			echo "<tr><th>cart ID</th><th>product ID</th></tr><tr><td>" . $row['cartID'] . "</td><td>" . $row['producID'] . "</td></tr>";  //$row['index'] the index here is a field name
+			echo "<tr><th>cart ID</th><th>product ID</th></tr><tr><td>" . $row['cartID'] . "</td><td>" . $row['productID'] . "</td></tr>";  //$row['index'] the index here is a field name
 			}
 
 			echo "</table>"; //Close the table in HTML

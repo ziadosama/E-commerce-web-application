@@ -21,11 +21,6 @@
 		}
 	}
 	
-	if (isset($_POST['btn-add'])) {
-		$productName = strip_tags($_POST['productName']);
-		$productName = $DBcon->real_escape_string($productName);
-	}
-	
 	if (isset($_POST['btn-category'])) {
 		$catName = strip_tags($_POST['catName']);
 		$catName = $DBcon->real_escape_string($catName);
@@ -35,6 +30,27 @@
 				</div>";
 		} else{
 			$products=$DBcon->query("SELECT C.catName, C.categoryID, P.productID, P.productName FROM product P, category C Where C.catName='$catName' And P.categoryID = C.categoryID");
+		}
+	}
+	
+	if (isset($_POST['btn-add'])) {
+		$productName = strip_tags($_POST['productName']);
+		$productName = $DBcon->real_escape_string($productName);
+		if( empty($productName)){
+			$msg = "<div class='alert alert-danger'>
+					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; category name empty!
+				</div>";
+		} else{
+			$addProduct=$DBcon->query("SELECT P.productID FROM product P, category C Where P.productName='$productName' And P.categoryID = C.categoryID");
+			$userRow=$addProduct->fetch_array();
+			$check_cart = $DBcon->query("SELECT buyerID FROM cart WHERE buyerID='$userID'");
+			$count=$check_cart->num_rows;
+			if($count==0){
+				$result=$DBcon->query("INSERT INTO cart(buyerID) VALUES ('$userID'); ");
+			}
+			$addCartProduct=$DBcon->query("SELECT cartID FROM cart Where buyerID='$userID'; ");
+			$cartIDrow=$addCartProduct->fetch_array();
+			$result2=$DBcon->query("INSERT INTO `cart-product`(productID,cartID) VALUES ('$userRow[productID]','$cartIDrow[cartID]'); ");
 		}
 	}
 	
