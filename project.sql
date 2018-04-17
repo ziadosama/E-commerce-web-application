@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 11, 2018 at 04:53 PM
+-- Generation Time: Apr 17, 2018 at 07:55 PM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.3
 
@@ -54,6 +54,13 @@ CREATE TABLE `cart` (
   `buyerID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`cartID`, `buyerID`) VALUES
+(3, 3);
+
 -- --------------------------------------------------------
 
 --
@@ -62,8 +69,16 @@ CREATE TABLE `cart` (
 
 CREATE TABLE `cart-product` (
   `productID` int(11) DEFAULT NULL,
-  `cartID` int(11) DEFAULT NULL
+  `cartID` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `cart-product`
+--
+
+INSERT INTO `cart-product` (`productID`, `cartID`, `quantity`) VALUES
+(23, 3, 2);
 
 -- --------------------------------------------------------
 
@@ -83,9 +98,9 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`categoryID`, `catName`, `storeID`, `sellerID`) VALUES
-(50, 'ahmed', 23, 5),
-(51, 'mona', 23, 5),
-(52, 'mohsen', 23, 5);
+(53, 'appliances', 23, 5),
+(54, 'food', 23, 5),
+(55, 'electricity', 23, 5);
 
 -- --------------------------------------------------------
 
@@ -129,8 +144,10 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`productID`, `categoryID`, `sellerID`, `productName`) VALUES
-(19, 51, 5, 'a'),
-(20, 50, 5, 'bsbs');
+(23, 54, 5, 'banana'),
+(24, 53, 5, 'TV'),
+(25, 53, 5, 'Playstation'),
+(26, 55, 5, 'feesha');
 
 -- --------------------------------------------------------
 
@@ -257,13 +274,13 @@ ALTER TABLE `buyer`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cartID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `cartID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `categoryID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `categoryID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `orrder`
@@ -275,7 +292,7 @@ ALTER TABLE `orrder`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `productID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `productID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `seller`
