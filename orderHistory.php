@@ -7,16 +7,8 @@
 	
 	$msg="";
 	$userID=$_SESSION['userSession'];
-	$cart=$DBcon->query("SELECT * FROM cart WHERE buyerID='$userID';");
-	$userRow=$cart->fetch_array();
-	$cartP=$DBcon->query("SELECT * FROM `cart-product` WHERE cartID='$userRow[cartID]';");
-	$userRow=$cart->fetch_array();
 	
-	if (isset($_POST['btn-delete'])) {
-		
-	}
 	
-	$DBcon->close();
 
 ?>
 
@@ -74,12 +66,16 @@
 			?>
 		  <?php
 			echo "<table style='width:100%'>"; // start a table tag in the HTML
-
-			while($row = mysqli_fetch_array($cartP)){   //Creates a loop to loop through results
-			echo "<tr><th>cart ID</th><th>product ID</th></tr><tr><td>" . $row['cartID'] . "</td><td>" . $row['producID'] . "</td></tr>";  //$row['index'] the index here is a field name
+			$orders=$DBcon->query("SELECT * FROM orrder WHERE buyerID='$userID';");
+			while($row = mysqli_fetch_array($orders)){   //Creates a loop to loop through results
+				$orderP=$DBcon->query("SELECT P.productName, O.quantity FROM `order-product` O,  product P WHERE O.productID=P.productID AND O.orderID='$row[orderID]';");
+				while($row2 = mysqli_fetch_array($orderP)){   //Creates a loop to loop through results{
+					echo "<tr><th>Order ID</th><th>Date</th><th>Product Name</th><th>Quantity</th></tr><tr><td>" . $row['orderID'] . "</td><td>" . $row['orderDate'] . "</td><td>" . $row2['productName'] . "</td><td>" . $row2['quantity'] . "</td></tr>";  //$row['index'] the index here is a field name
+				}
 			}
 
 			echo "</table>"; //Close the table in HTML
+			$DBcon->close();
 		  ?>
 		  <hr>
 		  
