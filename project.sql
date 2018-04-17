@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 17, 2018 at 07:55 PM
+-- Generation Time: Apr 17, 2018 at 11:55 PM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.3
 
@@ -54,13 +54,6 @@ CREATE TABLE `cart` (
   `buyerID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `cart`
---
-
-INSERT INTO `cart` (`cartID`, `buyerID`) VALUES
-(3, 3);
-
 -- --------------------------------------------------------
 
 --
@@ -72,13 +65,6 @@ CREATE TABLE `cart-product` (
   `cartID` int(11) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `cart-product`
---
-
-INSERT INTO `cart-product` (`productID`, `cartID`, `quantity`) VALUES
-(23, 3, 2);
 
 -- --------------------------------------------------------
 
@@ -110,8 +96,19 @@ INSERT INTO `category` (`categoryID`, `catName`, `storeID`, `sellerID`) VALUES
 
 CREATE TABLE `order-product` (
   `productID` int(11) DEFAULT NULL,
-  `orderID` int(11) DEFAULT NULL
+  `orderID` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `order-product`
+--
+
+INSERT INTO `order-product` (`productID`, `orderID`, `quantity`) VALUES
+(24, 13, 1),
+(25, 13, 1),
+(24, 15, 2),
+(24, 16, 1);
 
 -- --------------------------------------------------------
 
@@ -125,6 +122,16 @@ CREATE TABLE `orrder` (
   `sellerID` int(11) DEFAULT NULL,
   `buyerID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `orrder`
+--
+
+INSERT INTO `orrder` (`orderID`, `orderDate`, `sellerID`, `buyerID`) VALUES
+(11, '2012-08-06', 5, 3),
+(13, '2012-08-06', 5, 3),
+(15, '2012-08-06', 5, 3),
+(16, '2012-08-06', 5, 3);
 
 -- --------------------------------------------------------
 
@@ -268,13 +275,13 @@ ALTER TABLE `store`
 -- AUTO_INCREMENT for table `buyer`
 --
 ALTER TABLE `buyer`
-  MODIFY `buyerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `buyerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cartID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `cartID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -286,7 +293,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `orrder`
 --
 ALTER TABLE `orrder`
-  MODIFY `orderID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `orderID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -298,7 +305,7 @@ ALTER TABLE `product`
 -- AUTO_INCREMENT for table `seller`
 --
 ALTER TABLE `seller`
-  MODIFY `sellerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `sellerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `store`
