@@ -71,7 +71,7 @@
 		  <ul class="nav navbar-nav">
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;</a></li>
+            <li><a href="../buye.php"><span class="glyphicon glyphicon-user"></span>&nbsp;</a></li>
             <li><a href="logout.php?logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp; Logout</a></li>
           </ul>
         </div><!--/.nav-collapse -->
