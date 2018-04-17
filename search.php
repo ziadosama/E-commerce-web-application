@@ -7,11 +7,35 @@
 	
 	$msg="";
 	$userID=$_SESSION['userSession'];
-	$products=$DBcon->query("SELECT category.catName, category.categoryID, product.productID, product.productName,product.categoryID FROM product, category WHERE product.categoryID=category.categoryID;");
-	$userRow=$products->fetch_array();
+	$products=$DBcon->query("SELECT C.catName, C.categoryID, P.productID, P.productName FROM product P, category C Where P.categoryID = C.categoryID;");
 	
-	if (isset($_POST['btn-delete'])) {
-		
+	if (isset($_POST['btn-search'])) {
+		$productName = strip_tags($_POST['productName']);
+		$productName = $DBcon->real_escape_string($productName);
+		if( empty($productName)){
+			$msg = "<div class='alert alert-danger'>
+					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; product name empty!
+				</div>";
+		} else{
+			$products=$DBcon->query("SELECT C.catName, C.categoryID, P.productID, P.productName FROM product P, category C Where P.productName='$productName' And P.categoryID = C.categoryID");
+		}
+	}
+	
+	if (isset($_POST['btn-add'])) {
+		$productName = strip_tags($_POST['productName']);
+		$productName = $DBcon->real_escape_string($productName);
+	}
+	
+	if (isset($_POST['btn-category'])) {
+		$catName = strip_tags($_POST['catName']);
+		$catName = $DBcon->real_escape_string($catName);
+		if( empty($catName)){
+			$msg = "<div class='alert alert-danger'>
+					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; category name empty!
+				</div>";
+		} else{
+			$products=$DBcon->query("SELECT C.catName, C.categoryID, P.productID, P.productName FROM product P, category C Where C.catName='$catName' And P.categoryID = C.categoryID");
+		}
 	}
 	
 	$DBcon->close();
@@ -49,8 +73,8 @@
 		  <?php
 			echo "<table style='width:100%'>"; // start a table tag in the HTML
 
-			while($row = mysqli_fetch_array($products)){   //Creates a loop to loop through results
-			#echo "<tr><th>cart ID</th><th>product ID</th></tr><tr><td>" . $row['cartID'] . "</td><td>" . $row['producID'] . "</td></tr>";  //$row['index'] the index here is a field name
+			while($row = mysqli_fetch_assoc($products)){   //Creates a loop to loop through results
+				echo "<tr><th>Category ID</th><th>Category Name</th><th>Product ID</th><th>Product Name</th></tr><tr><td>" . $row['categoryID'] . "</td><td>" . $row['catName'] . "</td><td>" . $row['productID'] . "</td><td>" . $row['productName'] . "</td></tr>";  //$row['index'] the index here is a field name
 			}
 
 			echo "</table>"; //Close the table in HTML
@@ -60,7 +84,7 @@
 		  <div class="form-group">
 			<label class="col-lg-3 control-label">Product Name:</label>
 			<div class="col-lg-8">
-			  <input class="form-control" type="text" placeholder="Product Name" name="catID">
+			  <input class="form-control" type="text" placeholder="Product Name" name="productName">
 			</div>
 		  </div>
 		  <div class="form-group">
@@ -70,7 +94,7 @@
 			  <span class="glyphicon glyphicon-save-changes"></span> Search Product
 			  </button>
 			   <button style={float:"right";} type="submit" class="btn btn-default" name="btn-add">
-			  <span class="glyphicon glyphicon-save-changes"></span> Add Product
+			  <span class="glyphicon glyphicon-save-changes"></span> Add to cart
 			  </button>
 			</div>
 		  </div>
@@ -78,7 +102,7 @@
 		   <div class="form-group">
 			<label class="col-lg-3 control-label">Category Name:</label>
 			<div class="col-lg-8">
-			  <input class="form-control" type="text" placeholder="Category Name" name="catID">
+			  <input class="form-control" type="text" placeholder="Category Name" name="catName">
 			</div>
 		  </div>
 		  <div class="form-group">

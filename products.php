@@ -28,7 +28,7 @@
 			$result=$DBcon->query("INSERT INTO product(categoryID, sellerID,productName) VALUES ('$userRow[categoryID]','$userID','$productName'); ");
 			header("Location: products.php");
 		}else{
-			$categoryQ=$DBcon->query("UPDATE product SET productName='$productName' WHERE productID='$userID' AND productID='$productID';");
+			$categoryQ=$DBcon->query("UPDATE product SET productName='$productName' WHERE sellerID='$userID' AND productID='$productID';");
 			header("Location: products.php");
 		}
 	}
@@ -43,9 +43,9 @@
 					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; product ID and name empty!
 				</div>";
 		}
-		elseif(empty($productID)){
+		elseif(empty($productID) OR empty($productName)){
 			$result=$DBcon->query("DELETE FROM `product` WHERE (productID = '$productID' OR productName = '$productName')AND sellerID='$userID'");
-		header("Location: products.php");
+			header("Location: products.php");
 		}
 	}
 	
@@ -95,21 +95,21 @@
 		  <div class="form-group">
 			<label class="col-lg-3 control-label">Product ID:</label>
 			<div class="col-lg-8">
-			  <input class="form-control" type="text" placeholder="Category ID to change name (leave empty to add new categories)" name="productID">
+			  <input class="form-control" type="text" placeholder="Product ID to change name (leave empty to add new products)" name="productID">
 			</div>
 		  </div>
 		  
 		  <div class="form-group">
 			<label class="col-lg-3 control-label">Category Name:</label>
 			<div class="col-lg-8">
-			  <input class="form-control" type="text" placeholder="Category ID to change name (leave empty to add new categories)" name="catName">
+			  <input class="form-control" type="text" placeholder="Category Name to change name (leave empty to add new categories)" name="catName" required>
 			</div>
 		  </div>
 		  
 		   <div class="form-group">
 			<label class="col-lg-3 control-label">Product Name:</label>
 			<div class="col-lg-8">
-			  <input class="form-control" type="text" placeholder="Category Name" name="productName">
+			  <input class="form-control" type="text" placeholder="Product Name" name="productName">
 			</div>
 		  </div>
 		  
@@ -121,7 +121,7 @@
 			  <span class="glyphicon glyphicon-save-changes"></span> Save Changes
 			  </button>
 			  <button style="float: right;" type="submit" class="btn btn-default" name="btn-delete">
-			  <span class="glyphicon glyphicon-delete-categories"></span> Delete Categories
+			  <span class="glyphicon glyphicon-delete-categories"></span> Delete Peoducts
 			  </button>
 			</div>
 		  </div>
