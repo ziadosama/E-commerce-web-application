@@ -7,14 +7,7 @@
 	
 	$msg="";
 	$userID=$_SESSION['userSession'];
-	$orders=$DBcon->query("SELECT * FROM orrder WHERE sellerID='$userID';");
-	$userRow=$orders->fetch_array();
-	
-	if (isset($_POST['btn-delete'])) {
-		
-	}
-	
-	$DBcon->close();
+
 
 ?>
 
@@ -30,14 +23,35 @@
 
 <body>
 <div class="container">
-    <h1>Orders
-	  <a href="seller.php" class="btn btn-default" style="float:right;">back</a>
-	  </h1>
-  	<hr>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand">Seller Page</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="../change.php?bs=s">Edit Info</a></li>
+            <li><a href="../addStore.php">Store</a></li>
+            <li class="active"><a href="../recvOrder.php">Recieve Order</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="../seller.php"><span class="glyphicon glyphicon-user"></span></a></li>
+            <li><a href="logout.php?logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp; Logout</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+	<br><br></br></br>
       <!-- edit form column -->
       <div class="col-md-9 personal-info">
 	  
-        <h3>Orders Info</h3>
+        <h3>Orders Recieved</h3>
         
         <form class="form-horizontal" role="form" method="post">
          
@@ -48,29 +62,19 @@
 			?>
 		  <?php
 			echo "<table style='width:100%'>"; // start a table tag in the HTML
-
+			$orders=$DBcon->query("SELECT * FROM orrder WHERE sellerID='$userID';");
 			while($row = mysqli_fetch_array($orders)){   //Creates a loop to loop through results
-			echo "<tr><th>order ID</th><th>order date</th></tr><tr><td>" . $row['orderID'] . "</td><td>" . $row['orderDate'] . "</td></tr>";  //$row['index'] the index here is a field name
+				$orderP=$DBcon->query("SELECT P.productName, O.quantity FROM `order-product` O,  product P WHERE O.productID=P.productID AND O.orderID='$row[orderID]';");
+				while($row2 = mysqli_fetch_array($orderP)){   //Creates a loop to loop through results{
+					echo "<tr><th>Order ID</th><th>Date</th><th>Product Name</th><th>Quantity</th></tr><tr><td>" . $row['orderID'] . "</td><td>" . $row['orderDate'] . "</td><td>" . $row2['productName'] . "</td><td>" . $row2['quantity'] . "</td></tr>";  //$row['index'] the index here is a field name
+				}
 			}
 
 			echo "</table>"; //Close the table in HTML
+			$DBcon->close();
 		  ?>
-		  <hr>
+		 
 		  
-		  <div class="form-group">
-			<label class="col-lg-3 control-label">order ID:</label>
-			<div class="col-lg-8">
-			  <input class="form-control" type="text" placeholder="Category ID to change name (leave empty to add new categories)" name="catID">
-			</div>
-		  </div>
-		  <div class="form-group">
-			<label class="col-md-3 control-label"></label>
-			<div class="col-md-8">
-			  <button type="submit" class="btn btn-default" name="btn-delete">
-			  <span class="glyphicon glyphicon-save-changes"></span> delete Orders
-			  </button>
-			</div>
-		  </div>
 		  
 		  
         </form>

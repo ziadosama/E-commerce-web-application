@@ -127,7 +127,11 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
+		 <?php if($bs=='b'){  ?>
           <a class="navbar-brand">Buyer Page</a>
+		   <?php } elseif($bs=='s'){ ?>
+		   <a class="navbar-brand">Seller Page</a>
+		   		  <?php } ?>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">

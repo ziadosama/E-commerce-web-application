@@ -35,10 +35,31 @@
 
 <body>
 <div class="container">
-    <h1>Store
-	  <a href="seller.php" class="btn btn-default" style="float:right;">back</a>
-	  </h1>
-  	<hr>
+   <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand">Seller Page</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="../change.php?bs=s">Edit Info</a></li>
+            <li class="active"><a href="../addStore.php">Store</a></li>
+            <li><a href="../recvOrder.php">Recieve Order</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="../seller.php"><span class="glyphicon glyphicon-user"></span></a></li>
+            <li><a href="logout.php?logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp; Logout</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+	<br><br></br></br>
       <!-- edit form column -->
       <div class="col-md-9 personal-info">
 	  
