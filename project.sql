@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 17, 2018 at 11:55 PM
+-- Generation Time: Apr 18, 2018 at 11:17 AM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.3
 
@@ -41,7 +41,8 @@ CREATE TABLE `buyer` (
 --
 
 INSERT INTO `buyer` (`buyerID`, `buyerPhone`, `buyerName`, `buyerEmail`, `buyerPwd`) VALUES
-(3, '1005851669', 'ziad', 'ziadosama@aucegypt.edu', '$2y$10$oIpLWV2LiuOYTCniMLGscOd26iK5hTfC/27A5tQaEm16ocmOpAugy');
+(3, '1005851669', 'ziad', 'ziadosama@aucegypt.edu', '$2y$10$oIpLWV2LiuOYTCniMLGscOd26iK5hTfC/27A5tQaEm16ocmOpAugy'),
+(9, '01005851669', 'mohsen', 'mohsen@mona.edu', '$2y$10$8XN1222rmNxBdT5hWRzGRON8nSNNfgE5BnUhdKgnGqK9UioWT5iXa');
 
 -- --------------------------------------------------------
 
@@ -86,7 +87,10 @@ CREATE TABLE `category` (
 INSERT INTO `category` (`categoryID`, `catName`, `storeID`, `sellerID`) VALUES
 (53, 'appliances', 23, 5),
 (54, 'food', 23, 5),
-(55, 'electricity', 23, 5);
+(55, 'electricity', 23, 5),
+(56, 'music', 23, 5),
+(59, 'foodies', 24, 23),
+(60, 'food', 24, 23);
 
 -- --------------------------------------------------------
 
@@ -108,7 +112,8 @@ INSERT INTO `order-product` (`productID`, `orderID`, `quantity`) VALUES
 (24, 13, 1),
 (25, 13, 1),
 (24, 15, 2),
-(24, 16, 1);
+(24, 16, 1),
+(23, 18, 2);
 
 -- --------------------------------------------------------
 
@@ -131,7 +136,8 @@ INSERT INTO `orrder` (`orderID`, `orderDate`, `sellerID`, `buyerID`) VALUES
 (11, '2012-08-06', 5, 3),
 (13, '2012-08-06', 5, 3),
 (15, '2012-08-06', 5, 3),
-(16, '2012-08-06', 5, 3);
+(16, '2012-08-06', 5, 3),
+(18, '2012-08-06', 5, 3);
 
 -- --------------------------------------------------------
 
@@ -154,7 +160,8 @@ INSERT INTO `product` (`productID`, `categoryID`, `sellerID`, `productName`) VAL
 (23, 54, 5, 'banana'),
 (24, 53, 5, 'TV'),
 (25, 53, 5, 'Playstation'),
-(26, 55, 5, 'feesha');
+(26, 55, 5, 'feesha'),
+(27, 60, 23, 'banana');
 
 -- --------------------------------------------------------
 
@@ -175,7 +182,8 @@ CREATE TABLE `seller` (
 --
 
 INSERT INTO `seller` (`sellerID`, `sellerPhone`, `sellerName`, `sellerEmail`, `sellerPwd`) VALUES
-(5, '1005851669', 'ziad', 'ziadosama@aucegypt.edu', '$2y$10$qUz6DsulmwIAXI77chFen.YEoS2hkbje7h0wcSvLNSA6RqjSPh9IO');
+(5, '1005851669', 'ziad', 'ziadosama@aucegypt.edu', '$2y$10$qUz6DsulmwIAXI77chFen.YEoS2hkbje7h0wcSvLNSA6RqjSPh9IO'),
+(23, '01005851669', 'mohsen', 'mohsen@mona.edu', '$2y$10$8XN1222rmNxBdT5hWRzGRON8nSNNfgE5BnUhdKgnGqK9UioWT5iXa');
 
 -- --------------------------------------------------------
 
@@ -194,7 +202,8 @@ CREATE TABLE `store` (
 --
 
 INSERT INTO `store` (`storeID`, `storeName`, `sellerID`) VALUES
-(23, 'ahmed', 5);
+(23, 'ahmed', 5),
+(24, 'mona', 23);
 
 --
 -- Indexes for dumped tables
@@ -226,9 +235,9 @@ ALTER TABLE `cart-product`
 --
 ALTER TABLE `category`
   ADD PRIMARY KEY (`categoryID`),
-  ADD UNIQUE KEY `catName` (`catName`),
   ADD KEY `storeID` (`storeID`),
-  ADD KEY `sellerID` (`sellerID`);
+  ADD KEY `sellerID` (`sellerID`),
+  ADD KEY `catName` (`catName`) USING BTREE;
 
 --
 -- Indexes for table `order-product`
@@ -275,43 +284,43 @@ ALTER TABLE `store`
 -- AUTO_INCREMENT for table `buyer`
 --
 ALTER TABLE `buyer`
-  MODIFY `buyerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `buyerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cartID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `cartID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `categoryID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `categoryID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT for table `orrder`
 --
 ALTER TABLE `orrder`
-  MODIFY `orderID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `orderID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `productID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `productID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `seller`
 --
 ALTER TABLE `seller`
-  MODIFY `sellerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `sellerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `store`
 --
 ALTER TABLE `store`
-  MODIFY `storeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `storeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- Constraints for dumped tables

@@ -7,7 +7,7 @@
 	
 	$msg="";
 	$userID=$_SESSION['userSession'];
-	$products=$DBcon->query("SELECT C.catName, C.categoryID, P.productID, P.productName FROM product P, category C Where P.categoryID = C.categoryID;");
+	$products=$DBcon->query("SELECT C.catName, S.storeName, P.productID, P.productName FROM product P, category C, store S Where P.categoryID = C.categoryID;");
 	
 	if (isset($_POST['btn-search'])) {
 		$productName = strip_tags($_POST['productName']);
@@ -17,7 +17,7 @@
 					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; product name empty!
 				</div>";
 		} else{
-			$products=$DBcon->query("SELECT C.catName, C.categoryID, P.productID, P.productName FROM product P, category C Where P.productName='$productName' And P.categoryID = C.categoryID");
+			$products=$DBcon->query("SELECT C.catName, S.storeName, P.productID, P.productName FROM product P, category C, store S Where P.productName='$productName' And P.categoryID = C.categoryID");
 		}
 	}
 	
@@ -29,7 +29,19 @@
 					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; category name empty!
 				</div>";
 		} else{
-			$products=$DBcon->query("SELECT C.catName, C.categoryID, P.productID, P.productName FROM product P, category C Where C.catName='$catName' And P.categoryID = C.categoryID");
+			$products=$DBcon->query("SELECT C.catName, S.storeName, P.productID, P.productName FROM product P, category C, store S Where C.catName='$catName' And C.categoryID = P.categoryID");
+		}
+	}
+	
+	if (isset($_POST['btn-store'])) {
+		$catName = strip_tags($_POST['storeName']);
+		$catName = $DBcon->real_escape_string($catName);
+		if( empty($catName)){
+			$msg = "<div class='alert alert-danger'>
+					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; store name empty!
+				</div>";
+		} else{
+			$products=$DBcon->query("SELECT C.catName, S.storeName, P.productID, P.productName FROM product P, category C, store S Where S.storeName='$catName' And C.categoryID = P.categoryID");
 		}
 	}
 	
@@ -38,7 +50,7 @@
 		$productName = $DBcon->real_escape_string($productName);
 		if( empty($productName)){
 			$msg = "<div class='alert alert-danger'>
-					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; category name empty!
+					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; product name empty!
 				</div>";
 		} else{
 			$addProduct=$DBcon->query("SELECT P.productID FROM product P, category C Where P.productName='$productName' And P.categoryID = C.categoryID");
@@ -137,7 +149,7 @@
 			echo "<table style='width:100%'>"; // start a table tag in the HTML
 
 			while($row = mysqli_fetch_assoc($products)){   //Creates a loop to loop through results
-				echo "<tr><th>Category ID</th><th>Category Name</th><th>Product ID</th><th>Product Name</th></tr><tr><td>" . $row['categoryID'] . "</td><td>" . $row['catName'] . "</td><td>" . $row['productID'] . "</td><td>" . $row['productName'] . "</td></tr>";  //$row['index'] the index here is a field name
+				echo "<tr><th>Store Name</th><th>Category Name</th><th>Product Name</th></tr><tr><td>" . $row['storeName'] . "</td><td>" . $row['catName'] . "</td><td>" . $row['productName'] . "</td></tr>";  //$row['index'] the index here is a field name
 			}
 
 			echo "</table>"; //Close the table in HTML
@@ -180,7 +192,21 @@
 			  </button>
 			</div>
 		  </div>
-		  
+
+		   <div class="form-group">
+			<label class="col-lg-3 control-label">Store Name:</label>
+			<div class="col-lg-8">
+			  <input class="form-control" type="text" placeholder="Store Name" name="storeName">
+			</div>
+		  </div>
+		  <div class="form-group">
+			<label class="col-md-3 control-label"></label>
+			<div class="col-md-8">
+			  <button type="submit" class="btn btn-default" name="btn-store">
+			  <span class="glyphicon glyphicon-save-changes"></span> Search Store
+			  </button>
+			</div>
+		  </div>
 		  
         </form>
       </div>
