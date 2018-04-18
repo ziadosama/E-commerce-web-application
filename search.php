@@ -7,7 +7,7 @@
 	
 	$msg="";
 	$userID=$_SESSION['userSession'];
-	$products=$DBcon->query("SELECT C.catName, S.storeName, P.productID, P.productName FROM product P, category C, store S Where P.categoryID = C.categoryID;");
+	$products=$DBcon->query("SELECT C.catName, S.storeName, P.productID, P.productName FROM product P, category C, store S Where P.categoryID = C.categoryID AND S.storeID=C.storeID");
 	
 	if (isset($_POST['btn-search'])) {
 		$productName = strip_tags($_POST['productName']);
@@ -17,7 +17,7 @@
 					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; product name empty!
 				</div>";
 		} else{
-			$products=$DBcon->query("SELECT C.catName, S.storeName, P.productID, P.productName FROM product P, category C, store S Where P.productName='$productName' And P.categoryID = C.categoryID");
+			$products=$DBcon->query("SELECT C.catName, S.storeName, P.productID, P.productName FROM product P, category C, store S Where P.productName='$productName' And P.categoryID = C.categoryID AND S.storeID=C.storeID");
 		}
 	}
 	
@@ -29,7 +29,7 @@
 					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; category name empty!
 				</div>";
 		} else{
-			$products=$DBcon->query("SELECT C.catName, S.storeName, P.productID, P.productName FROM product P, category C, store S Where C.catName='$catName' And C.categoryID = P.categoryID");
+			$products=$DBcon->query("SELECT C.catName, S.storeName, P.productID, P.productName FROM product P, category C, store S Where C.catName='$catName' And C.categoryID = P.categoryID AND S.storeID=C.storeID");
 		}
 	}
 	
@@ -41,7 +41,7 @@
 					<span class='glyphicon glyphicon-info-sign'></span> &nbsp; store name empty!
 				</div>";
 		} else{
-			$products=$DBcon->query("SELECT C.catName, S.storeName, P.productID, P.productName FROM product P, category C, store S Where S.storeName='$catName' And C.categoryID = P.categoryID");
+			$products=$DBcon->query("SELECT C.catName, S.storeName, P.productID, P.productName FROM product P, category C, store S Where S.storeName='$catName' And C.categoryID = P.categoryID AND S.storeID=C.storeID");
 		}
 	}
 	
