@@ -1,2 +1,2 @@
 # Database Project
-An simple E-commerce web application
+A simple E-commerce web application
